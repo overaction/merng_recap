@@ -1,4 +1,3 @@
-const { findById } = require('../../models/Post');
 const Post = require('../../models/Post');
 const checkAuth = require('../../util/checkAuth');
 
