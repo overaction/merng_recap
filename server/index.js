@@ -7,7 +7,10 @@ const resolvers = require('./graphql/resolvers');
 
 const server = new ApolloServer({
     typeDefs:typeDefs,
-    resolvers
+    resolvers,
+    context: ({req}) => {
+        return {req}
+    }
 });
 
 // G3NKijqVd42lfgDe

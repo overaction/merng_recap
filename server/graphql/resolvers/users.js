@@ -10,7 +10,6 @@ function generateToken(user) {
         id: user.id,
         email: user.email,
         username: user.username,
-        password: user.password
     },SECRET_KEY,{expiresIn: '5h'});
 }
 
