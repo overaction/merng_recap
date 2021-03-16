@@ -18,6 +18,7 @@ module.exports = {
                     $push: {"comments": {
                         body,
                         username: user.username,
+                        email: user.email,
                         createdAt: new Date().toISOString()
                     }}
                 }, {
@@ -35,7 +36,7 @@ module.exports = {
             try {
                 const post = await Post.findById(postId);
                 const commentIdx = post.comments.findIndex(c => c.id === commentId);
-                if(post.comments[commentIdx].username === user.username) {
+                if(post.comments[commentIdx].email === user.email) {
                     post.comments.splice(commentIdx,1);
                     await post.save();
                     
@@ -47,6 +48,30 @@ module.exports = {
             }
             catch(err) {
                 throw new UserInputError('포스트 또는 댓글이 존재하지 않습니다');
+            }
+        },
+        async likePost(_,{postId},context) {
+            const {username,email} = checkAuth(context);
+            console.log(email,username);
+            const post = await Post.findById(postId);
+            if(post) {
+                if(post.likes.find(like => like.email === email)) {
+                    // 이미 좋아요를 눌렀음 -> unlike로 바꿔야함
+                    post.likes = post.likes.filter(like => like.email !== email);
+                }
+                else {
+                    // 좋아요 새로 누름
+                    post.likes.push({
+                        username,
+                        email,
+                        createdAt: new Date().toISOString()
+                    });
+                }
+                await post.save();
+                return post;
+            }
+            else {
+                throw new UserInputError('포스트가 존재하지 않습니다')
             }
         }
     }
