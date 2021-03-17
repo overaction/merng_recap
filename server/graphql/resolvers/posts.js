@@ -1,3 +1,4 @@
+const { UserInputError } = require('apollo-server-errors');
 const Post = require('../../models/Post');
 const checkAuth = require('../../util/checkAuth');
 
@@ -33,7 +34,9 @@ module.exports = {
         async createPost(_,{body},context) {
             const user = checkAuth(context);
             console.log(user);
-
+            if(body === '') {
+                throw new UserInputError('내용을 입력해주세요')
+            }
             const newPost = new Post({
                 body,
                 username:user.username,
