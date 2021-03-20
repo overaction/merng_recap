@@ -1,10 +1,14 @@
 import { gql, useMutation } from '@apollo/client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { Button, Form, Label } from 'semantic-ui-react'
+import { AuthContext } from '../context/auth'
 import { useForm } from '../utils/hooks'
 
 const Login = () => {
+
+    const context = useContext(AuthContext);
+
     const history = useHistory();
 
     const [errors, setErrors] = useState({});
@@ -26,7 +30,7 @@ const Login = () => {
 
     const [loginUser,{loading,error,data}] = useMutation(LOGIN_USER, {
         update(proxy, result) {
-            console.log(result);
+            context.login(result.data.login)
             history.push({
                 pathname: "/"
             });
@@ -74,14 +78,22 @@ const Login = () => {
                 />
                 <Button primary>확인</Button>
             </Form>
-            {Object.keys(errors).length > 0 && (
+            {errors.hasOwnProperty("general") ? (
                 <div className="ui error message">
                     <ul className="list">
-                        {Object.values(errors).map((error) => (
-                            <li key={error}>{error}</li>
-                        ))}
+                        <li key={errors.general}>{errors.general}</li>
                     </ul>
                 </div>
+            ) : (
+                Object.keys(errors).length > 0 && (
+                    <div className="ui error message">
+                        <ul className="list">
+                            {Object.values(errors).map((error) => (
+                                <li key={error}>{error}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )
             )}
         </div>
     );
