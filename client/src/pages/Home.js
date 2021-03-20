@@ -27,7 +27,7 @@ const Home = () => {
 }
 
 const FETCH_POST_QUERY = gql`
-    {
+    query{
         getPosts {
             id createdAt username likeCount commentCount
             likes {
