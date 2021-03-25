@@ -72,6 +72,7 @@ const Login = () => {
                     label="Password"
                     placeholder="Password..."
                     name="password"
+                    type="password"
                     value={values.password}
                     error={errors.password ? true : false}
                     onChange={onChange}
