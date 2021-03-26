@@ -15,12 +15,16 @@ const MenuBar = () => {
         setActiveItem(name);
     }
 
+    const onLogout = () => {
+        logout();
+        setActiveItem('home');
+    }
 
     const menuBar = user ? (
         <Menu pointing secondary size="massive" color="teal">
             <Menu.Item name={user.email} content={user.email} active as={Link} to="/" />
             <Menu.Menu position="right">
-                <Menu.Item name="logout" onClick={handleItemClick} />
+                <Menu.Item name="logout" onClick={onLogout} />
             </Menu.Menu>
         </Menu>
     ) : (
